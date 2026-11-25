@@ -17,4 +17,5 @@ add_executable(Practica_college src/main.cpp
         src/Booking.cpp
         include/models/Booking.h
         src/Group.cpp
-        include/models/Group.h)
+        include/models/Group.h
+        include/models/Date.h)
