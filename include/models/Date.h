@@ -4,11 +4,12 @@
 #include <cstdint>
 class Date
 {
-   uint32_t day = 0;
-   uint32_t month = 0;
-   uint32_t year = 0;
+public:
+   int32_t day = 0;
+   int32_t month = 0;
+   int32_t year = 0;
 
-   Date(int day = 1, int month = 1, int year = 2026)
+   Date(int32_t day = 1, int32_t month = 1, int32_t year = 2026)
    {
       this->day = day;
       this->month = month;
