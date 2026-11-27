@@ -8,7 +8,7 @@
 class Excursion
 {
 public:
-  Excursion(int32_t id, const std::string& tittle, const Date& date, int32_t price, int32_t maxSeats, int32_t minSeats);
+    Excursion(int32_t id, const std::string& tittle, const Date& date, int32_t price, int32_t maxSeats, int32_t minSeats);
     int32_t getId() const;
     const std::string& getTittle() const;
     const Date& getDate() const;
