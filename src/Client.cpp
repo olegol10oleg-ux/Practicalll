@@ -16,5 +16,5 @@ void Client::setEmail(const std::string& newEmail)
 
 std::string Client::getInfo() const
 {
-    return "Client #" + std::to_string(id) + ": " + name + "phone: " + phone + "email: " + email;
+    return "Client #" + std::to_string(id) + ": " + name + ", phone: " + phone + ", email: " + email;
 }

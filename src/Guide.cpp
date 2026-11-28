@@ -14,7 +14,7 @@ Guide::Guide(int32_t id, const std::string& name, const std::string& phone,
     }
     else
     {
-        this->rating = 0.0;
+        this->rating = 0;
     }
 }
 
@@ -23,7 +23,7 @@ const std::vector<std::string>& Guide::getLanguages() const
     return languages;
 }
 
-void Guide::setLanguages(const std::string& language)
+void Guide::addLanguages(const std::string& language)
 {
     if (!speaks(language))
     {
@@ -47,9 +47,9 @@ int32_t Guide::getRating() const
     return rating;
 }
 
-bool Guide::setRating(double newRating)
+bool Guide::setRating(int32_t newRating)
 {
-    if (newRating < 0.0 || newRating > 5.0)
+    if (newRating < 0 || newRating > 500)
     {
         return false;
     }
@@ -105,8 +105,8 @@ std::string Guide::getInfo() const
         cents = "0" + cents;
     }
 
-    std::string result = "Guide" + std::to_string(id) + ":" + name + "phone:"
-    + phone + "rating:" + std::to_string(rating / 100) + "." + cents + "languages:";
+    std::string result = "Guide #" + std::to_string(id) + ": " + name + ", phone: " + phone +
+        ", rating: " + std::to_string(rating / 100) + "." + cents + ", languages: ";
     for (size_t i = 0; i < languages.size(); ++i)
     {
         result += languages[i];

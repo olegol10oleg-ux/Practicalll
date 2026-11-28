@@ -2,6 +2,10 @@
 #define PRACTICA_COLLEGE_VEHICLE_H
 #include "Date.h"
 #include <vector>
+#include<string>
+#include <cstdint>
+
+
 class Vehicle
 {
 public:

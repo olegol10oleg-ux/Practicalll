@@ -1,5 +1,4 @@
 #include "../include/models/Vehicle.h"
-
 #include <vector>
 #include <string>
 #include <cstdint>
@@ -50,7 +49,7 @@ bool Vehicle::isAvailable(const Date& date) const
 }
 bool Vehicle::reserve(const Date& date)
 {
-    if (isAvailable(date))
+    if (!isAvailable(date))
     {
         return false;
     }
@@ -63,7 +62,7 @@ void Vehicle::release(const Date& date)
     {
         if (busyDates[i] == date)
         {
-            for (size_t j = i; j < busyDates.size(); ++j)
+            for (size_t j = i; j + 1 < busyDates.size(); ++j)
             {
                 busyDates[j] = busyDates[j + 1];
             }
@@ -78,5 +77,5 @@ const std::vector<Date>& Vehicle::getBusyDates() const
 }
 std::string Vehicle::getInfo() const
 {
-    return "Vehicle:" + std::to_string(id) + ":" + model + "capacity:" + std::to_string(capacity);
+    return "Vehicle #" + std::to_string(id) + ": " + model + ", capacity: " + std::to_string(capacity);
 }

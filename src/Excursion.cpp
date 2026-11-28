@@ -2,14 +2,10 @@
 #include <string>
 #include <cstdint>
 
-Excursion::Excursion(int32_t id,const std::string& tittle, const Date& date, int32_t price, int32_t maxSeats, int32_t minSeats)
-    : id(id), tittle(tittle), date(date), price(price), maxSeats(maxSeats), minSeats(minSeats)
+Excursion::Excursion(int32_t id, const std::string& tittle, const Date& date, int32_t price, int32_t maxSeats, int32_t minSeats)
+    : id(id), tittle(tittle), date(date)
 {
-    this->id = id;
-    this->tittle = tittle;
-    this->date = date;
-
-    if (price == 0)
+    if (price >= 0)
     {
         this->price = price;
     }
@@ -34,7 +30,6 @@ Excursion::Excursion(int32_t id,const std::string& tittle, const Date& date, int
         this->minSeats = 0;
     }
 }
-
 int32_t Excursion::getId() const
 {
     return id;
@@ -65,7 +60,7 @@ int32_t Excursion::getBookedSeats() const
 }
 int32_t Excursion::freeSeats() const
 {
-    return minSeats - bookedSeats;
+    return maxSeats - bookedSeats;
 }
 bool Excursion::hasEnoughSeats(int32_t n) const
 {
@@ -96,7 +91,7 @@ bool Excursion::releaseSeats(int32_t n)
 }
 std::string Excursion::getPriceString() const
 {
-    std::string cents =std::to_string(price % 100);
+    std::string cents = std::to_string(price % 100);
     if (price % 100 < 10)
     {
         cents = "0" + cents;
@@ -106,6 +101,6 @@ std::string Excursion::getPriceString() const
 std::string Excursion::getInfo() const
 {
     return "Excursion #" + std::to_string(id) + ": " + tittle + ", date: " + date.toString() +
-        ", price: " +getPriceString() + ", seats: " + std::to_string(bookedSeats) + "/" +
-            std::to_string(maxSeats);
+        ", price: " + getPriceString() + ", seats: " + std::to_string(bookedSeats) + "/" +
+        std::to_string(maxSeats) + " (min " + std::to_string(minSeats) + ")";
 }

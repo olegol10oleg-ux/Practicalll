@@ -1,5 +1,4 @@
 #include "../include/models/Group.h"
-#include <algorithm>
 #include <string>
 #include <vector>
 #include <cstdint>
@@ -52,11 +51,11 @@ const std::string &Group::getCancelReason() const
 int32_t Group::getTotalSeats() const
 {
     int32_t total = 0;
-    for (const auto *x : bookings)
+    for (const auto *b : bookings)
     {
-        if (x->isActive())
+        if (b->isActive())
         {
-            total += x->getSeatsCount();
+            total += b->getSeatsCount();
         }
     }
     return total;
@@ -103,9 +102,12 @@ bool Group::addBooking(Booking *booking)
     {
         return fail("Booking is cancelled");
     }
-    if (std::find(bookings.begin(), bookings.end(), booking) != bookings.end())
+    for (const auto *b : bookings)
     {
-        return fail("Booking is already in the group");
+        if (b == booking)
+        {
+            return fail("Booking is already in the group");
+        }
     }
     if (vehicle != nullptr && getTotalSeats() + booking->getSeatsCount() > vehicle->getCapacity())
     {
@@ -122,14 +124,15 @@ bool Group::removeBooking(int32_t bookingId)
     {
         return fail("Group is closed for changes");
     }
-    auto it = std::find_if(bookings.begin(), bookings.end(),
-                           [bookingId](const Booking *b) { return b->getId() == bookingId; });
-    if (it == bookings.end())
+    for (size_t i = 0; i < bookings.size(); ++i)
     {
-        return fail("Booking not found in the group");
+        if (bookings[i]->getId() == bookingId)
+        {
+            bookings.erase(bookings.begin() + i);
+            return true;
+        }
     }
-    bookings.erase(it);
-    return true;
+    return fail("Booking not found in the group");
 }
 bool Group::assignGuide(Guide *newGuide, const std::string &language)
 {
@@ -218,6 +221,10 @@ bool Group::start()
     {
         return fail("Group is not ready");
     }
+    if (getTotalSeats() < excursion->getMinSeats())
+    {
+        return fail("Minimum number of seats is no longer reached (cancel the group)");
+    }
     status = GroupStatus::IN_PROGRESS;
     return true;
 }
@@ -245,9 +252,9 @@ bool Group::cancel(const std::string &reason)
     {
         return fail("Group is already cancelled");
     }
-    for (auto *x : bookings)
+    for (auto *b : bookings)
     {
-        x->cancel();
+        b->cancel();
     }
     releaseResources();
     cancelReason = reason;
@@ -263,42 +270,38 @@ bool Group::cancelIfNotEnoughSeats()
     }
     return cancel("Not enough seats");
 }
-
-
-
 std::string Group::getStatusString() const
 {
-        std::string result;
-        switch (status)
-        {
-            case GroupStatus::FORMING:
-                result = "FORMING";
-                break;
-            case GroupStatus::GUIDE_ASSIGNED:
-                result = "GUIDE_ASSIGNED";
-                break;
-            case GroupStatus::TRANSPORT_ASSIGNED:
-                result = "TRANSPORT_ASSIGNED";
-                break;
-            case GroupStatus::READY:
-                result = "READY";
-                break;
-            case GroupStatus::IN_PROGRESS:
-                result = "IN_PROGRESS";
-                break;
-            case GroupStatus::COMPLETED:
-                result = "COMPLETED";
-                break;
-            case GroupStatus::CANCELLED:
-                result = "CANCELLED";
-                break;
-            default:
-                result = "UNKNOWN";
-                break;
-        }
+    std::string result;
+    switch (status)
+    {
+        case GroupStatus::FORMING:
+            result = "FORMING";
+            break;
+        case GroupStatus::GUIDE_ASSIGNED:
+            result = "GUIDE_ASSIGNED";
+            break;
+        case GroupStatus::TRANSPORT_ASSIGNED:
+            result = "TRANSPORT_ASSIGNED";
+            break;
+        case GroupStatus::READY:
+            result = "READY";
+            break;
+        case GroupStatus::IN_PROGRESS:
+            result = "IN_PROGRESS";
+            break;
+        case GroupStatus::COMPLETED:
+            result = "COMPLETED";
+            break;
+        case GroupStatus::CANCELLED:
+            result = "CANCELLED";
+            break;
+        default:
+            result = "UNKNOWN";
+            break;
+    }
     return result;
 }
-
 
 std::string Group::getInfo() const
 {

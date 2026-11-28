@@ -13,13 +13,13 @@ Guide(int32_t id, const std::string& name, const std::string& phone,
         const std::vector<std::string>& languages, int32_t rating);
 const std::vector<std::string>& getLanguages() const;
 
-void setLanguages(const std::string& language);
+void addLanguages(const std::string& language);
 
 bool speaks(const std::string& language) const;
 
 int32_t getRating() const;
 
-bool setRating(double newRating);
+bool setRating(int32_t newRating);
 bool isAvailable(const Date& date) const;
 bool reserve(const Date& date);
 

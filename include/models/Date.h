@@ -2,6 +2,8 @@
 #define PRACTICA_COLLEGE_DATE_H
 #include <string>
 #include <cstdint>
+
+
 class Date
 {
 public:
@@ -30,11 +32,10 @@ public:
       }
       if (month < 10)
       {
-         d = "0" + m;
+         m = "0" + m;
       }
-      return d + "." + std::to_string(year);
+      return d + "." + m + "." + std::to_string(year);
    }
 
 };
-
 #endif
